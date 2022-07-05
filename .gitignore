@@ -1,0 +1,14 @@
+# volumes
+/logs
+/db
+
+/.env.*
+
+# IDE setting
+## PhpStorm
+.idea
+/symfony/var/cache
+/symfony/var/log
+/symfony/public/bundles
+/symfony/vendor
+/symfony/var/*
