@@ -6,7 +6,7 @@ test-project EONX
 First, clone this repository:
 
 ```bash
-$ git clone https://github.com/VitEzerskyy/eonx-test-task.git
+git clone https://github.com/VitEzerskyy/eonx-test-task.git
 ```
 
 Do not forget to add `eonx.localhost` in your `/etc/hosts` file.
@@ -14,12 +14,26 @@ Do not forget to add `eonx.localhost` in your `/etc/hosts` file.
 Then, run:
 
 ```bash
-$ docker-compose up -d
+docker-compose up -d
 ```
-
+Inside the php-fpm container execute:
+```bash
+composer install
+```
+Then execute:
+```bash
+bin/console doctrine:migrations:migrate -n
+```
 You are done, you can visit your Symfony application on the following URL: `http://eonx.localhost`)
 
 Api doc: `http://eonx.localhost/api`
+
+First, import data from 3d party API by `POST /customers/create`
+Then you can get customers from Db:
+
+`GET /customers`
+
+`GET /customers/{id}`
 
 
 # Containers
@@ -32,5 +46,12 @@ Here are the `docker-compose` built images:
 
 # Tests
 ```bash
-$ vendor/bin/phpunit tests/
+vendor/bin/phpunit tests/
 ```
+
+# Improvements
+
+In full version of application can be improved:
+
+* add pagination to `/customers` endpoint
+* add functional tests to all endpoints (to check correct behaviour of endpoints) (https://symfony.com/doc/current/testing.html#application-tests)
