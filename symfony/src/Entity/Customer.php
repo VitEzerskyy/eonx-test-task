@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Customer\CreateController;
 use App\Controller\Customer\ListController;
 use App\Controller\Customer\ShowController;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[UniqueEntity("email")]
 #[ApiResource(
     collectionOperations: [
     'get' => [
@@ -21,6 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'path' => '/customers',
         'controller' => ListController::class,
         'normalization_context' => ['groups' => ['list']],
+    ],
+    'post' => [
+        'method' => 'POST',
+        'path' => '/customers/create',
+        'controller' => CreateController::class,
+        'normalization_context' => ['groups' => []],
     ],
 ],
     itemOperations: [
