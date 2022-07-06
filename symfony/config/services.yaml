@@ -27,11 +27,15 @@ services:
             $client: '@guzzle_client'
 
     App\Provider\ProviderInterface: '@api.data_provider'
+    App\Provider\HandlerInterface: '@api.data_handler'
 
     api.data_provider:
         class: App\Provider\Api\DataProvider
         arguments:
             $client: '@api_client'
+
+    api.data_handler:
+        class: App\Provider\Api\DataHandler
 
     api.data_importer:
         class: App\Importer\Api\DataImporter

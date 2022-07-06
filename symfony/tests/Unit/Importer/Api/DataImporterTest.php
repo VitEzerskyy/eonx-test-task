@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Importer\Api;
 
 use App\Entity\Customer;
 use App\Importer\Api\DataImporter;
+use App\Provider\HandlerInterface;
 use App\Provider\ProviderInterface;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,17 +18,20 @@ class DataImporterTest extends TestCase
     private MockObject $providerInterface;
     private MockObject $entityManager;
     private MockObject $customerRepository;
+    private MockObject $handlerInterface;
     private DataImporter $dataImporter;
 
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->providerInterface = $this->createMock(ProviderInterface::class);
+        $this->handlerInterface = $this->createMock(HandlerInterface::class);
         $this->customerRepository = $this->createMock(CustomerRepository::class);
         $this->dataImporter = new DataImporter(
             $this->providerInterface,
             $this->entityManager,
-            $this->customerRepository
+            $this->customerRepository,
+            $this->handlerInterface
         );
     }
 
@@ -58,6 +62,10 @@ class DataImporterTest extends TestCase
             ->method('findAll')
             ->willReturn([]);
 
+        $this->handlerInterface
+            ->expects($this->exactly(2))
+            ->method('createCustomer');
+
         $this->entityManager
             ->expects($this->exactly(2))
             ->method('persist')
@@ -85,6 +93,10 @@ class DataImporterTest extends TestCase
             ->expects($this->once())
             ->method('findAll')
             ->willReturn($customers);
+
+        $this->handlerInterface
+            ->expects($this->exactly(2))
+            ->method('updateCustomer');
 
         $this->entityManager
             ->expects($this->exactly(2))
@@ -130,6 +142,10 @@ class DataImporterTest extends TestCase
             ->expects($this->once())
             ->method('findAll')
             ->willReturn([$customerOne, $customerTwo]);
+
+        $this->handlerInterface
+            ->expects($this->exactly(2))
+            ->method('createCustomer');
 
         $this->entityManager
             ->expects($this->exactly(2))
